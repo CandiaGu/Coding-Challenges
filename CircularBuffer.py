@@ -1,4 +1,4 @@
-
+from collections import Counter
 class CircularBuffer(object):
 
 
@@ -10,19 +10,59 @@ class CircularBuffer(object):
 
     def __eq__(self, other):
         if(not isinstance(other, CircularBuffer)):
-            print "not an instance of circular buffer!\n"
+            print("not an instance of circular buffer!\n")
             return False
         if len(self.list)!=len(other.list):
-            print "lists not the same length!\n"
+            print ("lists not the same length!\n")
             return False
         return self.checkListEqual(other)
 
     def checkListEqual(self, other):
+        #given lists are both the same length
         #checks if the list parameters are rotations of eachother
         curList = self.list
         otherList = other.list
+
+        #wtf the least frequent elem in list
+        curCnt = Counter()
+        otherCnt = Counter()
+        for elem in curList:
+            curCnt[elem]+=1
+        for elem in otherList:
+            otherCnt[elem]+=1
+        curLeastCommonTup = curCnt.most_common()[-1]
+        otherLeastCommonTup = otherCnt.most_common()[-1]
+        if curLeastCommonTup!=otherLeastCommonTup:
+            return False
+        leastCommonElem = curLeastCommonTup[0]
+        leastCommonFreq = curLeastCommonTup[1]
+
+        #find start for both lists
+        curStart = curList.index(leastCommonElem)
+        otherStart = otherList.index(leastCommonElem)
+
+        #iterates thru other list to find beginning
+        index = 0
+        otherStartCount = 0
+        while(index < len(otherList)):
+            if self.getValue(curStart+index) != other.getValue(otherStart+index):
+                index = 0
+                otherStartCount += 1
+                if otherStartCount>=leastCommonFreq:
+                    return False
+                curStart = findNxtStart(other, leastCommonElem, otherStart) 
+            index += 1
+        return True
+
+
+        def findNxtStart(self, other, elem, otherStart):
+            for n in range(len(other.list)):
+                if other.getValue(otherStart+n+1)==elem:
+                    return (otherStart+n+1)%len(other.list)
+
+
         
-        start = curList[0]
+        """start = curList[0]
         curLen = len(curList)
         otherStarts = [] #stores all indexes in otherList whose value are equal to start
         #finds indexes in otherList that are equal to curList[0] and adds them to starts
@@ -47,6 +87,7 @@ class CircularBuffer(object):
             index += step
         print len(otherStarts), otherStarts
         return len(otherStarts)!=0
+        """
 
     
     def getValue(self, index):
@@ -65,25 +106,25 @@ if __name__ == '__main__':
     #making sure circular buffer works
     assert(cb1.getValue(5)==cb1.getValue(2))
     
-    print "testing non-instance..."
+    print ("testing non-instance...")
     assert(not cb1 == 1)
 
-    print "testing non-length..."
+    print ("testing non-length...")
     assert(not cb1 == cb3)
 
-    print "testing equality..."
-    print "\n cb1 vs cb2"
+    print ("testing equality...")
+    print ("\n cb1 vs cb2")
     assert(cb1 == cb2)
-    print "\n cb4 vs cb4"
+    print ("\n cb4 vs cb4")
     assert(cb4 == cb4)
-    print "\n cb5 vs cb5"
+    print ("\n cb5 vs cb5")
     assert(cb5 == cb5)
-    print "\n cb4 vs cb5"
+    print ("\n cb4 vs cb5")
     assert(not cb4 == cb5)
     #making sure eq works
     #assert(cb1==cb2)
 
-    print "this code kinda works!"
+    print ("this code kinda works!")
 
 
 
