@@ -1,3 +1,8 @@
+#Challenge: An algorithm that finds whether a circular buffer is equal to another in less than O(n^2); A circular
+#   buffer remains equal to another even when rotated.
+
+#Solution: Best case for below is O(n), but is still O(n^2) for worst case D: 
+
 from collections import Counter
 class CircularBuffer(object):
 
@@ -23,7 +28,7 @@ class CircularBuffer(object):
         curList = self.list
         otherList = other.list
 
-        #wtf the least frequent elem in list
+        #finds the least frequent elem in list
         curCnt = Counter()
         otherCnt = Counter()
         for elem in curList:
@@ -41,7 +46,7 @@ class CircularBuffer(object):
         curStart = curList.index(leastCommonElem)
         otherStart = otherList.index(leastCommonElem)
 
-        #iterates thru other list to find beginning
+        #iterates thru other list to find beginning and checks the rest of the list as well
         index = 0
         otherStartCount = 0
         while(index < len(otherList)):
@@ -97,7 +102,7 @@ class CircularBuffer(object):
 ####
 
 if __name__ == '__main__':
-
+    ###tests
     cb1 = CircularBuffer([1,2,3])
     cb2 = CircularBuffer([2,3,1])
     cb3 = CircularBuffer([1,2,3,4])
