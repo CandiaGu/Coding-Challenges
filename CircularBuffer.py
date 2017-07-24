@@ -1,3 +1,6 @@
+#This challenge is to find matching circular buffers, where matching buffers included rotated arrays
+#note: a circular buffer is an array where the end points back to the beginning
+
 from collections import Counter
 class CircularBuffer(object):
 
@@ -50,7 +53,7 @@ class CircularBuffer(object):
                 otherStartCount += 1
                 if otherStartCount>=leastCommonFreq:
                     return False
-                curStart = findNxtStart(other, leastCommonElem, otherStart) 
+                otherStart = findNxtStart(other, leastCommonElem, otherStart) 
             index += 1
         return True
 
